@@ -1,13 +1,27 @@
 import React from 'react'
-import { Timeline } from './components'
+import { createGlobalStyle } from 'styled-components'
+import ApplicationContainer from './containers/ApplicationContainer'
 
-export default class Application extends React.Component {
-  state = {
-    sections: [],
-  }
+const GlobalStyles = createGlobalStyle`
+#app {
+  height: 600px;
+}
 
-  render() {
-    const { sections } = this.state
-    return <Timeline sections={sections} />
-  }
+body {
+  margin: 0;
+}
+
+
+* {
+  font-family: 'Open Sans', sans-serif;
+ }
+`
+
+export default function Application() {
+  return (
+    <>
+      <ApplicationContainer />
+      <GlobalStyles />
+    </>
+  )
 }
