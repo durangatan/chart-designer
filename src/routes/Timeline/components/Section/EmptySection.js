@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+
 import Icon from 'components/Icon'
 import { SectionTag, AddSectionButton } from './styled'
 
-export default function EmptySection({ addNewSection, pixelsPerBar }) {
-  const addSectionMemo = useCallback(() => addNewSection(), [addNewSection])
+export default function EmptySection({ addSection, pixelsPerBar }) {
   return (
     <SectionTag durationInBars={4} pixelsPerBar={pixelsPerBar}>
-      <AddSectionButton onClick={addSectionMemo} title="Add Section">
+      <AddSectionButton onClick={addSection} title="Add Section">
         <Icon name="volume-up" />
       </AddSectionButton>
     </SectionTag>
@@ -15,6 +15,6 @@ export default function EmptySection({ addNewSection, pixelsPerBar }) {
 }
 
 EmptySection.propTypes = {
-  addNewSection: PropTypes.func.isRequired,
+  addSection: PropTypes.func.isRequired,
   pixelsPerBar: PropTypes.number.isRequired,
 }

@@ -11,3 +11,10 @@ export function keyPressReducer(state, action) {
   }
   return state
 }
+
+export const hasLeftOrRightArrow = (state, action) =>
+  action.keys.has('ArrowLeft') || action.keys.has('ArrowRight')
+
+export const hasLetter = letter => (state, action) => action.keys.has(letter)
+
+export const includesEscapeKey = (state, action) => action.keys.has('Escape')

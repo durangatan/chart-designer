@@ -1,9 +1,11 @@
-export const SET_CHART_DURATION_IN_BARS = 'SET_CHART_DURATION_IN_BARS'
+export const UPDATE_CHART = 'UPDATE_CHART'
+
+export const updateChart = updates => ({ type: UPDATE_CHART, updates })
 
 const ACTIONS = {
-  [SET_CHART_DURATION_IN_BARS]: (state, action) => ({
+  [UPDATE_CHART]: (state, action) => ({
     ...state,
-    durationInBars: action.durationInBars,
+    ...(action.updates || {}),
   }),
 }
 

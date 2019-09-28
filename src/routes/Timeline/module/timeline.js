@@ -1,4 +1,5 @@
 import { SET_KEYS_PRESSED } from 'module/keypress'
+import getId from 'utils/getId'
 import { timelineKeypressReducer } from './timeline-keypress'
 
 export const ADD_SECTION = 'timeline/ADD_SECTION'
@@ -6,7 +7,22 @@ export const DELETE_SECTION = 'timeline/DELETE_SECTION'
 export const UPDATE_SECTION = 'timeline/UPDATE_SECTION'
 export const UPDATE_SELECTED_SECTION = 'timeline/UPDATE_SELECTED_SECTION'
 export const CHANGE_SELECTED_INDEX = 'timeline/CHANGE_SELECTED_INDEX'
-export const addSection = section => ({ section, type: ADD_SECTION })
+
+export const addSection = () => ({
+  section: {
+    stack: { parts: [] },
+    durationInBars: 8,
+    title: '',
+    id: getId(),
+  },
+  type: ADD_SECTION,
+})
+
+export const onAddSection = (state, action) => ({
+  ...state,
+  sections: state.sections.concat([action.section]),
+  selected: state.sections.length === 0 ? action.section.id : state.selected,
+})
 
 export const deleteSection = sectionId => ({ sectionId, type: DELETE_SECTION })
 
@@ -27,11 +43,7 @@ export const changeSelectedIndex = delta => ({
 })
 
 const ACTIONS = {
-  [ADD_SECTION]: (state, action) => ({
-    ...state,
-    sections: state.sections.concat([action.section]),
-    selected: state.sections.length === 0 ? action.section.id : state.selected,
-  }),
+  [ADD_SECTION]: onAddSection,
 
   [DELETE_SECTION]: (state, action) => {
     const filteredSections = state.sections.filter(

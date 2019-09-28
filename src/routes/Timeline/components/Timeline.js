@@ -18,7 +18,7 @@ export default function Timeline({
   sections,
   updateSection,
   deleteSection,
-  addNewSection,
+  addSection,
   updateSelectedSection,
   selectedSectionId,
   pixelsPerBar,
@@ -40,7 +40,9 @@ export default function Timeline({
           pixelsPerBar={pixelsPerBar}
         />
       ))}
-      <EmptySection addNewSection={addNewSection} pixelsPerBar={pixelsPerBar} />
+      {!sections.length && (
+        <EmptySection addSection={addSection} pixelsPerBar={pixelsPerBar} />
+      )}
     </TimelineWrapper>
   )
 }
@@ -53,7 +55,7 @@ Timeline.propTypes = {
   sections: PropTypes.arrayOf(sectionType),
   updateSection: PropTypes.func.isRequired,
   deleteSection: PropTypes.func.isRequired,
-  addNewSection: PropTypes.func.isRequired,
+  addSection: PropTypes.func.isRequired,
   updateSelectedSection: PropTypes.func.isRequired,
   selectedSectionId: PropTypes.string.isRequired,
   pixelsPerBar: PropTypes.number.isRequired,

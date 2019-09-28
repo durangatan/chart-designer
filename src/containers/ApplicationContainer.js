@@ -1,49 +1,36 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useCallback } from 'react'
+
 import useKeyPress from 'hooks/use-key-press'
 import useWindowSize from 'hooks/use-window-size'
-import TimelineContainer from '../routes/Timeline'
-import ChartContainer from '../routes/Chart'
-import { chartReducer } from '../routes/Chart/module/chart'
-import { timelineReducer } from '../routes/Timeline/module/timeline'
-import { keyPressReducer, setKeysPressed } from '../module/keypress'
-import {
-  setWindowSize,
-  windowSizeReducer,
-  getWindowSize,
-} from '../module/windowSize'
+import useMidiInput from 'hooks/use-midi-input'
 
-const reducers = {
-  timeline: timelineReducer,
-  keypress: keyPressReducer,
-  chart: chartReducer,
-  windowSize: windowSizeReducer,
-}
+import { setKeysPressed } from 'module/keypress'
+import { setWindowSize } from 'module/windowSize'
+import { receiveMidiMessage } from 'module/midi'
+import { rootReducer, initialState } from 'module/application'
 
-const initialState = {
-  timeline: { sections: [], selected: '-1' },
-  chart: { durationInBars: 48 },
-  keypress: new Set(),
-  windowSize: getWindowSize(),
-}
-
-const rootReducer = (state, action) => {
-  console.log(`[ROOT]:[STATE]:${JSON.stringify(state)}`)
-  console.log(`[ROOT]:[ACTION}:${JSON.stringify(action)}`)
-  let newState = { ...state }
-  Object.entries(reducers).forEach(([stateKey, reducer]) => {
-    newState = { ...newState, [stateKey]: reducer(state[stateKey], action) }
-  })
-  return newState
-}
+import ApplicationRoutes from 'routes/ApplicationRoutes'
 
 export default function ApplicationContainer() {
   const [state, dispatch] = useReducer(rootReducer, initialState)
-  useKeyPress(state.keypress, keys => dispatch(setKeysPressed(keys)))
-  useWindowSize(state.windowSize, size => dispatch(setWindowSize(size)))
-  return (
-    <>
-      <ChartContainer dispatch={dispatch} state={state} />
-      <TimelineContainer dispatch={dispatch} state={state} />
-    </>
+
+  const keyPressCallback = useCallback(
+    keys => dispatch(setKeysPressed(keys)),
+    []
   )
+  useKeyPress(state.keypress, keyPressCallback)
+
+  const windowSizeCallback = useCallback(
+    size => dispatch(setWindowSize(size)),
+    []
+  )
+  useWindowSize(state.windowSize, windowSizeCallback)
+
+  const midiCallback = useCallback(
+    midiMessage => dispatch(receiveMidiMessage(midiMessage)),
+    []
+  )
+  useMidiInput(midiCallback)
+
+  return <ApplicationRoutes state={state} dispatch={dispatch} />
 }
