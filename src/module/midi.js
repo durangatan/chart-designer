@@ -1,4 +1,4 @@
-const RECEIVE_MIDI_MESSAGE = 'RECEIVE_MIDI_MESSAGE'
+export const RECEIVE_MIDI_MESSAGE = 'RECEIVE_MIDI_MESSAGE'
 
 export const receiveMidiMessage = message => ({
   message,
